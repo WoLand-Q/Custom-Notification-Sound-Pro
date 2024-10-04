@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Custom Notification Sound Pro</title>
+  <style>
+    /* Основные стили */
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      min-width: 320px;
+      padding: 20px;
+      background-color: #f0f2f5;
+      color: #333;
+      transition: background-color 0.3s, color 0.3s;
+    }
+    body.dark-mode {
+      background-color: #181a1b;
+      color: #f0f2f5;
+    }
+    h5 {
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    .form-group {
+      margin-bottom: 15px;
+      position: relative;
+    }
+    label {
+      font-weight: bold;
+      display: block;
+      margin-bottom: 5px;
+    }
+    input[type="text"],
+    select,
+    input[type="file"] {
+      width: 100%;
+      padding: 10px;
+      box-sizing: border-box;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      transition: border 0.3s;
+    }
+    input[type="text"]:focus,
+    select:focus,
+    input[type="file"]:focus {
+      border-color: #007bff;
+    }
+    .btn {
+      width: 100%;
+      padding: 12px;
+      margin-top: 10px;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      border-radius: 5px;
+      transition: background-color 0.3s;
+    }
+    .btn-primary {
+      background-color: #007bff;
+      color: #fff;
+    }
+    .btn-primary:hover {
+      background-color: #0056b3;
+    }
+    .btn-secondary {
+      background-color: #6c757d;
+      color: #fff;
+    }
+    .btn-secondary:hover {
+      background-color: #5a6268;
+    }
+    .btn:disabled {
+      background-color: #cccccc;
+      cursor: not-allowed;
+    }
+    .theme-toggle {
+      cursor: pointer;
+      text-align: right;
+      margin-bottom: 10px;
+    }
+    .author-info {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 14px;
+    }
+    .author-info a {
+      color: #007bff;
+      text-decoration: none;
+    }
+    .author-info a:hover {
+      text-decoration: underline;
+    }
+    /* Анимации */
+    .fade-in {
+      animation: fadeIn 0.5s ease-in-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    /* Стиль для модального окна */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 999;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.5);
+    }
+    .modal-content {
+      background-color: #fefefe;
+      color: #333;
+      margin: 15% auto;
+      padding: 20px;
+      border-radius: 5px;
+      width: 80%;
+      max-width: 400px;
+      text-align: center;
+    }
+    /* Добавляем стили для тёмной темы */
+    body.dark-mode .modal-content {
+      background-color: #333;
+      color: #f0f2f5;
+    }
+    .modal-content button {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body id="popupBody">
+<div class="theme-toggle">
+  <span id="themeIcon">🌞</span>
+</div>
+<h5>Custom Notification Sound Pro</h5>
+<div class="form-group fade-in">
+  <label>
+    <input type="checkbox" id="enableCheckbox">
+    Включить замену звука
+  </label>
+</div>
+<div class="form-group fade-in">
+  <label for="originalSoundUrl">URL оригинального звука:</label>
+  <input type="text" id="originalSoundUrl" placeholder="https://example.com/original-sound.mp3">
+</div>
+<div class="form-group fade-in">
+  <label for="soundSelect">Выберите звук из библиотеки:</label>
+  <select id="soundSelect">
+    <option value="">-- Выберите звук --</option>
+    <!-- Звуки будут загружены динамически -->
+  </select>
+</div>
+<div class="form-group fade-in">
+  <label for="urlInput">URL вашего аудиофайла:</label>
+  <input type="text" id="urlInput" placeholder="https://example.com/your-sound.mp3">
+</div>
+<div class="form-group fade-in">
+  <label for="fileInput">Или выберите локальный файл (MP3):</label>
+  <input type="file" id="fileInput" accept="audio/*">
+  <span id="fileName"></span>
+  <button id="clearFileButton" class="btn btn-secondary fade-in">Удалить выбранный файл</button>
+</div>
+<!-- Убираем громкость, если она не работает -->
+<!--
+<div class="form-group fade-in">
+  <label for="volumeControl">Громкость:</label>
+  <input type="range" id="volumeControl" min="0" max="1" step="0.01" value="1">
+</div>
+-->
+<button id="saveButton" class="btn btn-primary fade-in">Сохранить</button>
+<button id="previewButton" class="btn btn-secondary fade-in">Прослушать выбранный звук</button>
+<!-- Добавляем кнопки с ссылками -->
+<button id="instantsButton" class="btn btn-secondary fade-in">Сайт со звуками</button>
+<button id="documentationButton" class="btn btn-secondary fade-in">Документация</button>
+<div class="author-info fade-in">
+  <p>Разработано <a href="https://t.me/yarmitt" target="_blank">Yarmitt</a></p>
+  <p><a href="https://github.com/yarmitt" target="_blank">GitHub</a></p>
+</div>
+<!-- Модальное окно -->
+<div id="successModal" class="modal">
+  <div class="modal-content">
+    <p>Настройки успешно сохранены!</p>
+    <button id="modalOkButton" class="btn btn-primary">ОК</button>
+  </div>
+</div>
+<script src="popup.js"></script>
+</body>
+</html>

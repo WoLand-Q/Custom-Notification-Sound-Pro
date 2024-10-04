@@ -1,0 +1,39 @@
+{
+  "manifest_version": 3,
+  "name": "Custom Notification Sound Pro",
+  "version": "2.6",
+  "description": "Заменяет звук уведомления на любом сайте на ваш собственный, включая локальные аудиофайлы и встроенную библиотеку звуков.",
+  "permissions": [
+    "declarativeNetRequest",
+    "declarativeNetRequestWithHostAccess",
+    "storage",
+    "tabs"
+  ],
+  "host_permissions": [
+    "*://*/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["sounds/*"],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}
